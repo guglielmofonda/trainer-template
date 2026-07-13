@@ -1,9 +1,11 @@
 # Trainer — a progressive-overload strength platform
 
-A faithful re-implementation of the personal strength-training platform Matt Palmer
-([@mattyp](https://x.com/mattyp/status/2070129458305257746)) walks through in his
-"personal software" video — rebuilt from the transcript and frame-by-frame screen
-captures of the original.
+Shoutout to [Matt Palmer](https://x.com/mattyp/status/2070129458305257746) — this
+started as a faithful re-implementation of the web dashboard he walks through in
+his "personal software" video (rebuilt from the transcript and frame-by-frame
+screen captures of the original), then took it a step further with a full
+[Hevy](https://hevy.com) integration: automatic sync, scheduled pulls, webhooks,
+and routine pushes.
 
 The brief was explicit: **the backend — the thinking, theory, and rationale behind
 the trainings — is the core.** So that's where the work went. The
@@ -55,6 +57,18 @@ plan and pushes routines on your say-so. Without an API key it degrades to the
 deterministic offline mode shown here.
 
 ![Training coach page in offline mode](docs/screenshots/coach.png)
+
+**On the phone — and in Hevy.** The web app is responsive, so mid-gym coaching
+works from a pocket (left: the coach on mobile, from the author's live
+instance). The other two are the Hevy side of the integration: pushed routines
+land titled by week and day, foldered per block, with warm-ups marked and the
+prescription's RPE targets in the notes.
+
+<p align="center">
+  <img src="docs/screenshots/mobile-coach.png" width="32%" alt="Training coach on mobile, mid-conversation" />
+  <img src="docs/screenshots/hevy-routine.png" width="32%" alt="A pushed routine in Hevy with marked warm-up sets and RPE notes" />
+  <img src="docs/screenshots/hevy-folder.png" width="32%" alt="A week of pushed routines foldered in Hevy" />
+</p>
 
 ## What it does
 
