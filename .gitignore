@@ -1,0 +1,21 @@
+/node_modules
+/.next
+/out
+/build
+next-env.d.ts
+*.tsbuildinfo
+.env*
+!.env.example
+.DS_Store
+/.context
+/.impeccable
+# The store is the website's SOURCE OF TRUTH (program + logs) — track it in GitHub.
+# Ignore any other scratch json under data/, but keep store + block state versioned.
+/data/*.json
+!/data/store.json
+!/data/state.json
+!/data/hevy-history.json
+!/data/profile.json
+/.vercel
+.vercel
+.env*.local

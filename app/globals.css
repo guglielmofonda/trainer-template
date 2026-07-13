@@ -1,0 +1,350 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Gu trainer — "Ledger"
+   A serious, editorial strength instrument: paper & ink, hairline rules, sharp
+   corners, near-monochrome chrome. Color is reserved for data meaning only —
+   no shadows, no glows, no gradients. See DESIGN.md for the rationale.
+   ========================================================================= */
+
+@theme {
+  /* Paper & ink — cool-neutral editorial (chroma ~0; never a warm cream) */
+  --color-bg: oklch(0.986 0.0015 255);
+  --color-surface: oklch(0.969 0.002 255);
+  --color-surface-2: oklch(0.944 0.003 256);
+  --color-surface-3: oklch(0.908 0.004 258);
+  --color-border: oklch(0.858 0.004 258);
+  --color-border-soft: oklch(0.916 0.003 258);
+  --color-border-strong: oklch(0.7 0.006 260);
+  --color-ink: oklch(0.25 0.006 264);
+  --color-ink-strong: oklch(0.16 0.008 265);
+  --color-muted: oklch(0.448 0.006 262);
+  --color-faint: oklch(0.58 0.006 262);
+
+  /* Signal accent — one reserved vermilion. Active / live / danger, never décor. */
+  --color-accent: oklch(0.55 0.204 27);
+  --color-accent-strong: oklch(0.485 0.213 27);
+  --color-accent-ink: oklch(0.99 0.002 250);
+
+  /* Semantic data ramp — verdicts only, restrained and editorial (never chrome) */
+  --color-success: oklch(0.47 0.115 152);
+  --color-warning: oklch(0.55 0.14 56);
+  --color-danger: oklch(0.52 0.2 27);
+  --color-info: oklch(0.5 0.088 250);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, Monaco,
+    monospace;
+  --font-serif: var(--font-serif-display), "Iowan Old Style", "Palatino Linotype",
+    Palatino, Georgia, serif;
+
+  /* Sharp — a measurement instrument, not a bubble */
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+
+  /* Exponential ease-out — no bounce, no elastic */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Semantic z-index scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-backdrop: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}
+
+:root {
+  --dur-fast: 110ms;
+  --dur: 170ms;
+  --dur-slow: 260ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+body {
+  /* Base UI text is 14px; rem stays 16px-based so the tuned scale holds. */
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+::selection {
+  background: color-mix(in oklch, var(--color-accent) 18%, transparent);
+  color: var(--color-ink-strong);
+}
+
+/* Focus: the one accent, crisp and square. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* Thin, squared editorial scrollbars */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-3);
+  border: 3px solid var(--color-bg);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Tabular mono — the instrument readout voice, applied to every number. */
+.tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "cv01" 1;
+  letter-spacing: -0.01em;
+}
+
+/* Serif display — the editorial voice for titles and the brand. */
+.display {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+/* Small-caps label — replaces the pill/eyebrow reflex with a ruled caption. */
+.label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* -------- Motion primitives (all gated by reduced-motion below) -------- */
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes readout-flash {
+  0% {
+    color: var(--color-accent);
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+.anim-grow-x {
+  transform-origin: left center;
+  animation: grow-x var(--dur-slow) var(--ease-out) both;
+}
+.anim-fade-up {
+  animation: fade-up var(--dur-slow) var(--ease-out) both;
+}
+.anim-flash {
+  animation: readout-flash 600ms var(--ease-out);
+}
+
+/* Coach "thinking" dots — a smooth opacity wave, never bounce. */
+@keyframes thinking-pulse {
+  0% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 1;
+  }
+  60%,
+  100% {
+    opacity: 0.2;
+  }
+}
+.anim-thinking {
+  animation: thinking-pulse 1.3s var(--ease-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-thinking {
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   Prose styling for the rendered THEORY.md (the core of the project)
+   Editorial: serif headings, generous measure, hairline rules.
+   ========================================================================= */
+.theory {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--color-ink);
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+.theory > *:first-child {
+  margin-top: 0;
+}
+.theory h1 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.75rem;
+  text-wrap: balance;
+  color: var(--color-ink-strong);
+}
+.theory h2 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  margin: 2.75rem 0 0.75rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--color-border);
+  text-wrap: balance;
+  color: var(--color-ink-strong);
+}
+.theory h3 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--color-muted);
+}
+.theory p {
+  margin: 0.85rem 0;
+  color: var(--color-ink);
+}
+.theory a {
+  color: var(--color-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklch, var(--color-accent) 40%, transparent);
+  transition: border-color var(--dur) var(--ease-out);
+}
+.theory a:hover {
+  border-bottom-color: var(--color-accent);
+}
+.theory strong {
+  color: var(--color-ink-strong);
+  font-weight: 600;
+}
+.theory ul,
+.theory ol {
+  margin: 0.85rem 0;
+  padding-left: 1.4rem;
+  color: var(--color-ink);
+}
+.theory li {
+  margin: 0.4rem 0;
+}
+.theory li::marker {
+  color: var(--color-faint);
+}
+.theory code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-soft);
+  border-radius: 2px;
+  padding: 0.1em 0.35em;
+  color: var(--color-ink-strong);
+}
+.theory pre {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  margin: 1.15rem 0;
+}
+.theory pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-ink);
+}
+/* Blockquote as a ruled callout — full hairline, no side-stripe accent. */
+.theory blockquote {
+  margin: 1.35rem 0;
+  padding: 0.85rem 1.1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-muted);
+}
+.theory blockquote p {
+  margin: 0.4rem 0;
+  color: var(--color-muted);
+}
+.theory blockquote p:first-child {
+  margin-top: 0;
+}
+.theory blockquote p:last-child {
+  margin-bottom: 0;
+}
+.theory table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.35rem 0;
+  font-size: 0.8125rem;
+}
+.theory th,
+.theory td {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.theory th {
+  background: var(--color-surface);
+  color: var(--color-ink-strong);
+  font-weight: 600;
+}
+.theory hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2.75rem 0;
+}
