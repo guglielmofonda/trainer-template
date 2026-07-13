@@ -29,6 +29,33 @@ your program, connects Hevy and the AI coach if you want them, and walks you
 through deployment. Everything personal — names, branding, monogram — is
 driven by `data/profile.json`, so no code changes are needed to make it yours.
 
+## What it looks like
+
+A fresh clone, default branding, seeded example program — this is `npm run dev`
+before any configuration:
+
+**Configuration — the planning check.** Cycle shape, weekly volume per muscle
+graded against the MEV/MAV/MRV landmarks, and the composition of the split.
+
+![Configuration page: planning check with volume landmarks](docs/screenshots/configuration.png)
+
+**Program — every prescription for the selected week.** Big compounds carry
+marked warm-up ramps; autoregulated lifts re-scale to the opening single on the
+day.
+
+![Program page: week-by-week prescriptions](docs/screenshots/program.png)
+
+**Today's session.** Log a heavy opening single @ RPE 8 and the work sets
+re-scale live; completed sets drive next week's loads.
+
+![Today's session page: opening single and work sets](docs/screenshots/session.png)
+
+**Training coach.** Reads your program, volume, and Hevy history; edits the
+plan and pushes routines on your say-so. Without an API key it degrades to the
+deterministic offline mode shown here.
+
+![Training coach page in offline mode](docs/screenshots/coach.png)
+
 ## What it does
 
 - **Configuration / planning check** — build a cycle ("6 on / 1 off · 3 mesos"),
