@@ -20,7 +20,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    # A fresh copy of this template ships without secrets, and a scheduled run
+    # without the key would fail red every night and email you. Probe the
+    # secret here; the pull job runs only once HEVY_API_KEY is configured.
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.probe.outputs.ready }}
+    steps:
+      - name: Probe for HEVY_API_KEY
+        id: probe
+        env:
+          HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
+        run: |
+          if [ -n "$HEVY_API_KEY" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::HEVY_API_KEY is not configured — skipping. Add the secret (Settings → Secrets and variables → Actions) to enable the nightly pull."
+          fi
+
   pull:
+    needs: gate
+    if: needs.gate.outputs.ready == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
